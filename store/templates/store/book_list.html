@@ -9,6 +9,7 @@
 {% block content %}
 
 <h3>Books list</h3>
+<form method="GET">
 <div class="row">
     <div class="col-sm-3">
         Title: <input type="text" name="title" id="title">
@@ -21,8 +22,9 @@
     </div>
 </div>
 <div class="row">
-    <button id="search_button" class="btn btn-primary">Search</button>
+    <button type = "submit" id="search_button" class="btn btn-primary">Search</button>
 </div>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -47,26 +49,5 @@
         {% endfor %}
     </tbody>
 </table>
-<script>
 
-var base_url=location.protocol + '//' + location.host + location.pathname;
-
-$("#search_button").click(function(){
-    var final_url=base_url.replace(/\/$/, "");
-    title_value=$("#title").val();
-    if(title_value!=""){
-        final_url=final_url+"?title="+title_value;
-    }
-    author_value=$("#author").val();
-    if(author_value!=""){
-        final_url=final_url+"?author="+author_value;
-    }
-    genre_value=$("#genre").val();
-    if(genre_value!=""){
-        final_url=final_url+"?genre="+genre_value;
-    }
-    window.location.replace(final_url);
-});
-
-</script>
 {% endblock %}

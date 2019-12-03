@@ -1,43 +1,89 @@
-{% extends "store/base.html" %}
-
-{% block title %}
+{% extends "store/base.html" %} {% block title %}
 <title>
-    Loaned Books List | Library
+  Loaned Books List | Library
 </title>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 
 <h3>Loaned Books list</h3>
 
 <table class="table">
-    <thead>
-        <tr>
-        <th scope="col">#</th>
-        <th scope="col">Title</th>
-        <th scope="col">Author</th>
-        <th scope="col">Genre</th>
-        <th scope="col">Borrow Date</th>
-        <th scope="col">Return Buttons</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for copy in books %}
-        <tr>
-        <th scope="row">{{forloop.counter}}</th>
-        <td><a href="/book/{{copy.book.id}}">{{copy.book.title}}</a></td>
-        <td>{{copy.book.author}}</td>
-        <td>{{copy.book.genre}}</td>
-        <td>{{copy.borrow_date}}</td>
-        <td><button class="btn btn-primary" onclick="returnBook({{copy.book.bid}})">Return {{copy.book.title}}</button></td>
-        </tr>
-        {% endfor %}
-    </tbody>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Title</th>
+      <th scope="col">Author</th>
+      <th scope="col">Genre</th>
+      <th scope="col">Borrow Date</th>
+      <th scope="col">Rating</th>
+      <th scope="col">Return Buttons</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for copy in books %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>
+        <a href="/book/{{ copy.book.id }}">{{ copy.book.title }}</a>
+      </td>
+      <td>{{ copy.book.author }}</td>
+      <td>{{ copy.book.genre }}</td>
+      <td>{{ copy.borrow_date }}</td>
+      <td>
+        <input
+          class="form-control"
+          name="rating{{ copy.id }}"
+          value="0"
+          type="integer"
+          id="rating{{ copy.id }}"
+        />
+      </td>
+      <td>
+        <button
+          class="btn btn-primary"
+          onclick="returnBook({{ copy.book.id }}, {{ copy.id }})"
+        >
+          Return {{ copy.book.title }}
+        </button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
 <script>
-// Fill in this function by yourself. It should make a post call to the returnBookView and display an appropriate message
-function returnBook(bid){
-    ;
-}
+  // Fill in this function by yourself. It should make a post call to the returnBookView and display an appropriate message
+  function returnBook(bid,rid) {
+    var a = "rating" + rid;
+    var rating = document.getElementById(a).value;
+    if (Number(rating) === parseInt(rating, 10)) {
+      rating = Number(rating);
+      if (rating >= 1 && rating <= 10) {
+        $.ajax({
+          url: "{% url 'return-book' %}",
+          method: "POST",
+          data: {
+            bid: bid,
+            rating: rating,
+            rid: rid
+          },
+          success: function(data, status, xhr) {
+            if (data["message"] == 1) {
+              alert("Book successfully returned");
+              window.location.replace("/books/loaned");
+            } else {
+              alert("Unable to return this book");
+            }
+          },
+          error: function(xhr, status, err) {
+            alert("Some error occured");
+          }
+        });
+      } else {
+        alert("Write a number between 1 To 10 in rating box");
+      }
+    } else {
+      alert(parseInt(rating, 10));
+      //   alert("Write a number between 1 To 10 in rating box");
+    }
+  }
 </script>
 {% endblock %}

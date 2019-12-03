@@ -22,7 +22,7 @@
     <dd>{{num_available}}</dd>
 </dl>
 <button class="btn btn-primary" id="loan-button">Loan {{book.title}}</button>
-<script>
+<script> 
 $("#loan-button").click(function(){
     $.ajax({
 		url:"{% url 'loan-book' %}",
