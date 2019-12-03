@@ -1,6 +1,6 @@
 # Library Management System 
 
-This project is the Django backend of a library web application. 
+This project is the Django backend of a library web application. The main aim of this project is providing an easy to handle and automated library management system. This system is all about organizing, managing the library and library-oriented tasks. It also involves maintaining the database of entering new books and the record of books that have been retrieved or issued, with their respective dates. 
 
 
 
